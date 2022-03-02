@@ -10,7 +10,6 @@ class WiseAPI:
 
     BASE_URL = "https://api.transferwise.com"
     PROFILES_ENDPOINT = "/v1/profiles"
-    BORDERLESS_ENDPOINT = "/v1/borderless-accounts"
     BALANCE_ENDPOINT = "/v3/profiles/{profile-id}/balances"
     STATEMENT_ENDPOINT = "/v1/profiles/{profileId}/balance-statements/{balanceId}/statement.pdf"
 
@@ -18,7 +17,6 @@ class WiseAPI:
         self.api_key = api_key
         self.profile_type = profile_type
         self.profile_id = self.get_profile_id()
-        self.borderless_account_id = self.get_borderless_account_id()
 
     def get_profile_id(self) -> int:
         url = self.BASE_URL + self.PROFILES_ENDPOINT
@@ -27,15 +25,6 @@ class WiseAPI:
         profile_id = [profile["id"] for profile in response if profile["type"] == self.profile_type][0]
 
         return profile_id
-
-    def get_borderless_account_id(self) -> int:
-        params = {"profileId": self.profile_id}
-        url = self.BASE_URL + self.BORDERLESS_ENDPOINT
-
-        response = self.make_request("GET", url, params=params).json()
-        borderless_account_id = response[0]["id"]
-
-        return borderless_account_id
 
     def get_balance_ids(self) -> Dict[str, int]:
         balance_endpoint = self.BALANCE_ENDPOINT.format_map({"profile-id": self.profile_id})

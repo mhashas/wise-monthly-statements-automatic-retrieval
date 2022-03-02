@@ -22,4 +22,4 @@ def generate_statements():
             f.write(response.content)
 
 if __name__ == "__main__":
-    statements = generate_statements()
+    generate_statements()

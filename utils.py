@@ -49,11 +49,11 @@ def strong_customer_authentication_decorator(api_call: Callable) -> Callable:
             return result
 
         one_time_token = result.headers[c.ONE_TIME_TOKEN_HEADER]
-
         signature = generate_signature(one_time_token)
         headers = {c.ONE_TIME_TOKEN_HEADER: one_time_token, c.ONE_TIME_TOKEN_SIGNATURE_HEADER: signature}
-
+        
         result = api_call(*args, headers=headers, **kwargs)
+
         return result
 
     return wrapper
