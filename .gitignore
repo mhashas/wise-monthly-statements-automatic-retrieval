@@ -1,1 +1,8 @@
+env/* 
+keys/*
 .env 
+.vscode/*
+
+*.pyc
+*.DS_Store
+!.gitkeep
