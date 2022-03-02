@@ -22,7 +22,7 @@ class BaseParser:
             argparse.ArgumentParser: parser object
         """
         parser = ArgumentParser(description="Wise Monthly Statements Retrieval Automatic Retrieval")
-        parser.add_argument("--start_date", help="", type=lambda s: datetime.strptime(s, "%Y-%m-%d"), required=True)
+        parser.add_argument("--start_date", help="", type=lambda s: datetime.strptime(s, "%Y-%m-%d"), required=False)
         parser.add_argument("--end_date", type=lambda s: datetime.strptime(s, "%Y-%m-%d"), required=False, help="")
         parser.add_argument("--")
 
