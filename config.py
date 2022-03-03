@@ -1,3 +1,5 @@
+import calendar
+import datetime
 from argparse import ArgumentParser, Namespace
 from datetime import datetime
 from typing import Optional
@@ -13,7 +15,6 @@ class BaseParser:
     def __init__(self):
         parser = self.construct_parser()
         self.args = self.parse_arguments(parser)
-        self.args.run_name = self.construct_run_name(self.args)
 
     def construct_parser(self) -> ArgumentParser:
         """Constructs and returns the parser object
@@ -22,13 +23,20 @@ class BaseParser:
             argparse.ArgumentParser: parser object
         """
         parser = ArgumentParser(description="Wise Monthly Statements Retrieval Automatic Retrieval")
-        parser.add_argument("--start_date", help="", type=lambda s: datetime.strptime(s, "%Y-%m-%d"), required=False)
-        parser.add_argument("--end_date", type=lambda s: datetime.strptime(s, "%Y-%m-%d"), required=False, help="")
-        parser.add_argument("--")
+        parser.add_argument("--start_date", type=lambda s: datetime.strftime(s, "%Y-%m-%d %H:%M:%S %Z"), required=False)
+        parser.add_argument("--end_date", type=lambda s: datetime.strftime(s, "%Y-%m-%d %H:%M:%S %Z"), required=False)
+        parser.add_argument("--month", type=str, default="Feb", required=False)
+        parser.add_argument("--year", type=str, required=False)
+        parser.add_argument(
+            "--output_dir",
+            help="directory in which the generated pdfs are saved",
+            required=False,
+            default="./",
+        )
 
         return parser
 
-    def parse_arguments(self, parser: argparse.ArgumentParser) -> argparse.Namespace:
+    def parse_arguments(self, parser: ArgumentParser) -> Namespace:
         """Parses and returns the command line arguments.
         Raises an error on unknown arguments.
 
@@ -42,6 +50,22 @@ class BaseParser:
         if len(unknown_args) > 0:
             print(f"Warning: Unknown arguments detected {unknown_args}")
 
+        if not args.month and (not args.start_date or args.end_date):
+            raise RuntimeError("Please provide either a month or a start and end date")
+
+        if args.month:
+            month = list(calendar.month_abbr).index(args.month.capitalize())
+            year = args.year or datetime.now().date().year
+            
+            first_day = 1
+            _, last_day = calendar.monthrange(year, month)
+
+            first_day = datetime(year, month, first_day, 0, 0, 0).strftime('%Y-%m-%dT%H:%M:%SZ')
+            last_day = datetime(year, month, last_day, 23, 59, 59).strftime('%Y-%m-%dT%H:%M:%SZ')
+
+            args.start_date = first_day
+            args.end_date = last_day
+
         return args
 
 
@@ -49,6 +73,7 @@ class Config:
     def __init__(self, args: Namespace):
         self.start_date = args.start_date
         self.end_date = args.end_date
+        self.output_dir = args.output_dir
 
     @classmethod
     def from_parser(cls, parser: Optional[BaseParser] = None):

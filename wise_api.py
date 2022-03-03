@@ -39,12 +39,17 @@ class WiseAPI:
 
     @strong_customer_authentication_decorator
     def download_statements(
-        self, balance_id: int, type: str = c.STATEMENT_TYPE_ACCOUNTING, headers: Optional[Dict[str, str]] = None
+        self,
+        balance_id: int,
+        start_date: str,
+        end_date: str,
+        type: str = c.STATEMENT_TYPE_ACCOUNTING,
+        headers: Optional[Dict[str, str]] = None,
     ):
         statement_endpoint = self.STATEMENT_ENDPOINT.format_map({"profileId": self.profile_id, "balanceId": balance_id})
         url = self.BASE_URL + statement_endpoint
 
-        params = {"intervalStart": "2022-02-01T00:00:00.000Z", "intervalEnd": "2022-02-28T23:59:59.999Z", "type": type}
+        params = {"intervalStart": start_date, "intervalEnd": end_date, "type": type}
         result = self.make_request("GET", url, params=params, headers=headers, raise_for_status=False)
 
         return result

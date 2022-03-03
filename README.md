@@ -7,5 +7,4 @@
 
 ## Todo
 
-* argument for output_dir
-* generating start_date, end_date based on input argumenet automatically, i.e. feb -> generates 1feb -> 28 feb
+* add docstrings and documentation
