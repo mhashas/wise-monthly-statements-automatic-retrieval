@@ -25,7 +25,7 @@ class BaseParser:
         parser = ArgumentParser(description="Wise Monthly Statements Retrieval Automatic Retrieval")
         parser.add_argument("--start_date", type=lambda s: datetime.strftime(s, "%Y-%m-%d %H:%M:%S %Z"), required=False)
         parser.add_argument("--end_date", type=lambda s: datetime.strftime(s, "%Y-%m-%d %H:%M:%S %Z"), required=False)
-        parser.add_argument("--month", type=str, default="Feb", required=False)
+        parser.add_argument("--month", type=str, required=False)
         parser.add_argument("--year", type=str, required=False)
         parser.add_argument(
             "--output_dir",
@@ -51,7 +51,10 @@ class BaseParser:
             print(f"Warning: Unknown arguments detected {unknown_args}")
 
         if not args.month and (not args.start_date or args.end_date):
-            raise RuntimeError("Please provide either a month or a start and end date")
+            # default to previous month
+            month_index = datetime.now().month - 1
+            args.month = calendar.month_abbr[month_index]
+            print(f"Defaulting to previous month {args.month}")
 
         if args.month:
             month = list(calendar.month_abbr).index(args.month.capitalize())
