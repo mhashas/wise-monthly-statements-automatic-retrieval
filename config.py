@@ -76,6 +76,8 @@ class Config:
     def __init__(self, args: Namespace):
         self.start_date = args.start_date
         self.end_date = args.end_date
+        self.month = args.month
+        self.year = args.year
         self.output_dir = args.output_dir
 
     @classmethod
