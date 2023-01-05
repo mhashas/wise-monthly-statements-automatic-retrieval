@@ -50,15 +50,22 @@ class BaseParser:
         if len(unknown_args) > 0:
             print(f"Warning: Unknown arguments detected {unknown_args}")
 
+        substract_year = 0
         if not args.month and (not args.start_date or args.end_date):
             # default to previous month
             month_index = datetime.now().month - 1
+            
+            if month_index == 0:
+                month_index = 12
+                substract_year = 1 
+
             args.month = calendar.month_abbr[month_index]
             print(f"Defaulting to previous month {args.month}")
 
         if args.month:
             month = list(calendar.month_abbr).index(args.month.capitalize())
             year = args.year or datetime.now().date().year
+            year = year - substract_year
             
             first_day = 1
             _, last_day = calendar.monthrange(year, month)
