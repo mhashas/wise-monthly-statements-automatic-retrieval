@@ -1,5 +1,6 @@
 env/* 
 keys/*
+generated_documents/*
 .env 
 .vscode/*
 

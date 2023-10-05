@@ -1,5 +1,4 @@
 import calendar
-import datetime
 from argparse import ArgumentParser, Namespace
 from datetime import datetime
 from typing import Optional
@@ -31,7 +30,7 @@ class BaseParser:
             "--output_dir",
             help="directory in which the generated pdfs are saved",
             required=False,
-            default="./",
+            default="./generated_documents/",
         )
 
         return parser
@@ -54,10 +53,10 @@ class BaseParser:
         if not args.month and (not args.start_date or args.end_date):
             # default to previous month
             month_index = datetime.now().month - 1
-            
+
             if month_index == 0:
                 month_index = 12
-                substract_year = 1 
+                substract_year = 1
 
             args.month = calendar.month_abbr[month_index]
             print(f"Defaulting to previous month {args.month}")
@@ -66,12 +65,12 @@ class BaseParser:
             month = list(calendar.month_abbr).index(args.month.capitalize())
             year = args.year or datetime.now().date().year
             year = year - substract_year
-            
+
             first_day = 1
             _, last_day = calendar.monthrange(year, month)
 
-            first_day = datetime(year, month, first_day, 0, 0, 0).strftime('%Y-%m-%dT%H:%M:%SZ')
-            last_day = datetime(year, month, last_day, 23, 59, 59).strftime('%Y-%m-%dT%H:%M:%SZ')
+            first_day = datetime(year, month, first_day, 0, 0, 0).strftime("%Y-%m-%dT%H:%M:%SZ")
+            last_day = datetime(year, month, last_day, 23, 59, 59).strftime("%Y-%m-%dT%H:%M:%SZ")
 
             args.start_date = first_day
             args.end_date = last_day

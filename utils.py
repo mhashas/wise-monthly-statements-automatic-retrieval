@@ -40,7 +40,6 @@ def strong_customer_authentication_decorator(api_call: Callable) -> Callable:
     Returns:
         Callable: wrapped function
     """
-
     @functools.wraps(api_call)
     def wrapper(*args, **kwargs):
         result = api_call(*args, **kwargs)
