@@ -3,7 +3,7 @@ from argparse import ArgumentParser, Namespace
 from datetime import datetime
 from typing import Optional
 
-import constants as c
+import pkg.constants as c
 
 
 class BaseParser:

@@ -1,8 +1,8 @@
 import os
 
-import constants as c
-from config import Config
-from wise_api import WiseAPI
+import pkg.constants as c
+from pkg.config import Config
+from pkg.wise_api import WiseAPI
 
 
 def generate_statements(config: Config):
@@ -15,6 +15,7 @@ def generate_statements(config: Config):
     statements = wise_api.generate_statements(currencies, config.start_date, config.end_date)
 
     for currency, statement in statements.items():
+        print(f"Saving statement for {currency}")
         with open(os.path.join(config.output_dir, f"wise_{currency}.pdf"), "wb") as f:
             f.write(statement)
 

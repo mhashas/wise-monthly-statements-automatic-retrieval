@@ -1,8 +1,8 @@
 from typing import ByteString, Dict, List, Optional, Union
 
-import constants as c
+import pkg.constants as c
 from requests import Response, request
-from utils import strong_customer_authentication_decorator
+from pkg.utils import strong_customer_authentication_decorator
 
 
 class WiseAPI:

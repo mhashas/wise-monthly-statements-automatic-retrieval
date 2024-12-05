@@ -2,7 +2,7 @@ import functools
 import subprocess
 from typing import Callable
 
-import constants as c
+import pkg.constants as c
 
 
 def generate_signature(one_time_token: str) -> str:
